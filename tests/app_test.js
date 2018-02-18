@@ -75,7 +75,6 @@ describe('Flipkart API accumulation', function () {
             },
             method: 'GET',
             json: true,
-            proxy: "http://127.0.0.1:8888",
             rejectUnauthorized: false
         };
         console.log(options.url);
