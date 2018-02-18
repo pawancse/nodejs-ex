@@ -3,7 +3,7 @@ var express = require('express'),
   path = require('path');
 app = express(),
   morgan = require('morgan');
-
+  var fs = require('fs');
 Object.assign = require('object-assign')
 var flipkart = require('./routes/fapi');
 var bodyParser = require('body-parser');
@@ -11,7 +11,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));  
 app.set('view engine', 'ejs');
 app.use(morgan('combined'))
-app.use('/fapi', flipkart);
+app.get('/viewProducts', function (req, res, next) {
+  var json = JSON.parse(fs.readFileSync('./db/products.json', 'utf8'));
+  var products = [];
+  var startLimit = Math.floor(Math.random() * 10000) %  json.flipkart.length;
+  if(startLimit> (json.flipkart.length-20)){
+      startLimit = json.flipkart.length-20;
+  }
+  var val=[];
+  for(var i=0; i< 20; i++){
+      val.push(json.flipkart[startLimit++]);
+  }
+  var obj = {};
+  val.forEach(function(items){
+      obj.title= items.productBaseInfo.productAttributes.title;
+      obj.description = items.productBaseInfo.productAttributes.productDescription;
+      obj.mrp = items.productBaseInfo.productAttributes.maximumRetailPrice.amount+ ' '  +items.productBaseInfo.productAttributes.maximumRetailPrice.currency;
+      obj.sp = items.productBaseInfo.productAttributes.sellingPrice.amount+  ' '  +items.productBaseInfo.productAttributes.sellingPrice.currency;
+      obj.image = items.productBaseInfo.productAttributes.imageUrls.unknown;
+      obj.color = items.productBaseInfo.productAttributes.color;
+      obj.url= items.productBaseInfo.productAttributes.productUrl;
+      products.push(obj);
+      obj={};
+  })
+  console.log(products);
+  res.render('products', {products});
+});
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
   mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
