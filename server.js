@@ -5,10 +5,13 @@ app = express(),
   morgan = require('morgan');
 
 Object.assign = require('object-assign')
-
-app.engine('html', require('ejs').renderFile);
+var flipkart = require('./routes/fapi');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));  
+app.set('view engine', 'ejs');
 app.use(morgan('combined'))
-
+app.use('/fapi', flipkart);
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
   mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,

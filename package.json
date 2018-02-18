@@ -12,7 +12,10 @@
     "mongodb": "^2.1.16",
     "morgan": "^1.7.0",
     "object-assign": "4.1.0",
-    "pug": "^2.0.0-rc.4"
+    "pug": "^2.0.0-rc.4",
+    "jasmine": "^3.0.0",
+    "jasmine-expect": "^3.8.3",
+    "request": "^2.83.0"
   },
   "engine": {
     "node": "*",
@@ -20,7 +23,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
+    "test": "jasmine run tests/*_test.js --random=false"
   },
   "repository": {
     "type": "git",
