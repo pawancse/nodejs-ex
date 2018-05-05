@@ -77,7 +77,6 @@ describe('Flipkart API accumulation', function () {
                 'Fk-Affiliate-Id': 'pawanbcet',
                 'Fk-Affiliate-Token': '2b295c26a45a431ca310b0dcb32206f7'
             },
-            proxy: 'http://127.0.0.1:8888',
             method: 'GET',
             json: true,
             rejectUnauthorized: false
