@@ -82,7 +82,7 @@ var initDb = function (callback) {
 
     console.log('Connected to MongoDB at: %s', mongoURL);
   });
-};
+};app.use('/api', flipkart)
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/home', express.static(__dirname + '/resources'));
 app.get('/', function (req, res) {
