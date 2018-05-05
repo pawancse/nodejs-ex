@@ -8,27 +8,27 @@ describe('Flipkart API accumulation', function () {
         var url = 'https://affiliate-api.flipkart.net/affiliate/api/pawanbcet.json';
         return requestAPI(url)
             .then(function (response) {
-                urls = response.apiGroups.affiliate.apiListings.mobiles.availableVariants['v0.1.0'].get;
+                urls = response.apiGroups.affiliate.apiListings.mobiles.availableVariants['v1.1.0'].get;
             })
             .then(done)
             .catch(done);
     });
 
- /*   it('Offers Product for mobile', function (done) {
-        return requestAPI('https://affiliate-api.flipkart.net/affiliate/offers/v1/all/json')
-        .then(function (response) {
-            addItemToProduct(response.productInfoList);
-           // return callNextURL(response.nextUrl);
-        })
-        .then(done)
-        .catch(done);
-    });  
-    */  
+    /*   it('Offers Product for mobile', function (done) {
+           return requestAPI('https://affiliate-api.flipkart.net/affiliate/offers/v1/all/json')
+           .then(function (response) {
+               addItemToProduct(response.products);
+              // return callNextURL(response.nextUrl);
+           })
+           .then(done)
+           .catch(done);
+       });  
+       */
 
     it('getAllProduct for mobile', function (done) {
         return requestAPI(urls)
             .then(function (response) {
-                addItemToProduct(response.productInfoList);
+                addItemToProduct(response.products);
                 return callNextURL(response.nextUrl);
             })
             .then(function () {
@@ -50,13 +50,13 @@ describe('Flipkart API accumulation', function () {
     function callNextURL(url) {
         return requestAPI(url)
             .then(function (response) {
-                console.log(response.productInfoList.length);
-                if (response.nextUrl == null || response.productInfoList.length < 500) {
-                    addItemToProduct(response.productInfoList);
+                console.log(response.products.length);
+                if (response.nextUrl == null || response.products.length < 500) {
+                    addItemToProduct(response.products);
                     return;
                 }
                 else {
-                    addItemToProduct(response.productInfoList);
+                    addItemToProduct(response.products);
                     return callNextURL(response.nextUrl);
                 }
             })
@@ -66,25 +66,27 @@ describe('Flipkart API accumulation', function () {
     }
 
 
-    function requestAPI(url) {
+    function requestAPI(urlString) {
         var options = {
-            url: url,
+            baseUrl: urlString,
+            uri: '',
             headers: {
                 'Fk-Affiliate-Id': 'pawanbcet',
                 'Fk-Affiliate-Token': '2b295c26a45a431ca310b0dcb32206f7'
             },
+            proxy: 'http://127.0.0.1:8888',
             method: 'GET',
             json: true,
             rejectUnauthorized: false
         };
-        console.log(options.url);
+        console.log(options.baseUrl);
         return new Promise(function (resolve, reject) {
             request(options, function (error, response, body) {
-                if (!error && (response.statusCode === 200)) {
-                    if (response.statusCode === 200)
-                        resolve(response.body);
-                } else {
-                    console.log('simpleInitIdpHTML in utils has failed');
+                if (!error) {
+                    resolve(response.body);
+                }
+                else {
+                    console.log(error);
                 }
             });
         })
