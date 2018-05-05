@@ -1,5 +1,5 @@
 describe('Flipkart API accumulation', function () {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
     var request = require('request');
     var fs = require('fs');
     var urls;
@@ -42,6 +42,9 @@ describe('Flipkart API accumulation', function () {
     });
 
     function addItemToProduct(productArray) {
+        productArray = productArray.filter(function (item) {
+            return item.productBaseInfoV1.inStock == true;
+        });
         productArray.forEach(function (item) {
             product.push(item);
         })

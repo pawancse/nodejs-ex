@@ -15,13 +15,13 @@ router.get('/viewProducts', function (req, res, next) {
     }
     var obj = {};
     val.forEach(function(items){
-        obj.title= items.productBaseInfo.productAttributes.title;
-        obj.description = items.productBaseInfo.productAttributes.productDescription;
-        obj.mrp = items.productBaseInfo.productAttributes.maximumRetailPrice.amount+ ' '  +items.productBaseInfo.productAttributes.maximumRetailPrice.currency;
-        obj.sp = items.productBaseInfo.productAttributes.sellingPrice.amount+  ' '  +items.productBaseInfo.productAttributes.sellingPrice.currency;
-        obj.image = items.productBaseInfo.productAttributes.imageUrls.unknown;
-        obj.color = items.productBaseInfo.productAttributes.color;
-        obj.url= items.productBaseInfo.productAttributes.productUrl;
+        obj.title= items.productBaseInfoV1.attributes.title;
+        obj.description = items.productBaseInfoV1.attributes.productDescription;
+        obj.mrp = items.productBaseInfoV1.attributes.maximumRetailPrice.amount+ ' '  +items.productBaseInfoV1.attributes.maximumRetailPrice.currency;
+        obj.sp = items.productBaseInfoV1.attributes.sellingPrice.amount+  ' '  +items.productBaseInfoV1.attributes.sellingPrice.currency;
+        obj.image = items.productBaseInfoV1.attributes.imageUrls.unknown;
+        obj.color = items.productBaseInfoV1.attributes.color;
+        obj.url= items.productBaseInfoV1.attributes.productUrl;
         products.push(obj);
         obj={};
     })

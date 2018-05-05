@@ -24,17 +24,16 @@ app.get('/viewProducts', function (req, res, next) {
   }
   var obj = {};
   val.forEach(function(items){
-      obj.title= items.productBaseInfo.productAttributes.title;
-      obj.description = items.productBaseInfo.productAttributes.productDescription;
-      obj.mrp = items.productBaseInfo.productAttributes.maximumRetailPrice.amount+ ' '  +items.productBaseInfo.productAttributes.maximumRetailPrice.currency;
-      obj.sp = items.productBaseInfo.productAttributes.sellingPrice.amount+  ' '  +items.productBaseInfo.productAttributes.sellingPrice.currency;
-      obj.image = items.productBaseInfo.productAttributes.imageUrls.unknown;
-      obj.color = items.productBaseInfo.productAttributes.color;
-      obj.url= items.productBaseInfo.productAttributes.productUrl;
+      obj.title= items.productBaseInfoV1.title;
+      obj.description = items.productBaseInfoV1.productDescription;
+      obj.mrp = items.productBaseInfoV1.maximumRetailPrice.amount+ ' '  +items.productBaseInfoV1.maximumRetailPrice.currency;
+      obj.sp = items.productBaseInfoV1.flipkartSellingPrice.amount+  ' '  +items.productBaseInfoV1.flipkartSellingPrice.currency;
+      obj.image = items.productBaseInfoV1.imageUrls['400x400'];
+      obj.color = items.productBaseInfoV1.attributes.color;
+      obj.url= items.productBaseInfoV1.productUrl;
       products.push(obj);
       obj={};
   })
-  console.log(products);
   res.render('products', {products});
 });
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
