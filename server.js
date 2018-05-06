@@ -3,44 +3,43 @@ var express = require('express'),
   path = require('path');
 app = express(),
   morgan = require('morgan');
-  var fs = require('fs');
+var fs = require('fs');
 Object.assign = require('object-assign')
 var flipkart = require('./routes/fapi');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));  
+app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.use(morgan('combined'))
 app.get('/viewProducts', function (req, res, next) {
   var json = JSON.parse(fs.readFileSync('./db/products.json', 'utf8'));
   var products = [];
-  var startLimit = Math.floor(Math.random() * 10000) %  json.flipkart.length;
-  if(startLimit> (json.flipkart.length-20)){
-      startLimit = json.flipkart.length-20;
+  var startLimit = Math.floor(Math.random() * 10000) % json.flipkart.length;
+  if (startLimit > (json.flipkart.length - 20)) {
+    startLimit = json.flipkart.length - 20;
   }
-  var val=[];
-  for(var i=0; i< 20; i++){
-      val.push(json.flipkart[startLimit++]);
+  var val = [];
+  for (var i = 0; i < 20; i++) {
+    val.push(json.flipkart[startLimit++]);
   }
   var obj = {};
-  val.forEach(function(items){
-      obj.title= items.productBaseInfoV1.title;
-      obj.description = items.productBaseInfoV1.productDescription;
-      obj.mrp = items.productBaseInfoV1.maximumRetailPrice.amount+ ' '  +items.productBaseInfoV1.maximumRetailPrice.currency;
-      obj.sp = items.productBaseInfoV1.flipkartSellingPrice.amount+  ' '  +items.productBaseInfoV1.flipkartSellingPrice.currency;
-      obj.image = items.productBaseInfoV1.imageUrls['400x400'];
-      obj.color = items.productBaseInfoV1.attributes.color;
-      obj.url= items.productBaseInfoV1.productUrl;
-      products.push(obj);
-      obj={};
+  val.forEach(function (items) {
+    obj.title = items.productBaseInfoV1.title;
+    obj.description = items.productBaseInfoV1.productDescription;
+    obj.mrp = items.productBaseInfoV1.maximumRetailPrice.amount + ' ' + items.productBaseInfoV1.maximumRetailPrice.currency;
+    obj.sp = items.productBaseInfoV1.flipkartSellingPrice.amount + ' ' + items.productBaseInfoV1.flipkartSellingPrice.currency;
+    obj.image = items.productBaseInfoV1.imageUrls['400x400'];
+    obj.color = items.productBaseInfoV1.attributes.color;
+    obj.url = items.productBaseInfoV1.productUrl;
+    products.push(obj);
+    obj = {};
   })
-  res.render('products', {products});
+  res.render('products', { products });
 });
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-  mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+  mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || 'mongodb://127.0.0.1:27017',
   mongoURLLabel = "";
-
 if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
   var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
     mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
@@ -60,10 +59,10 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
 
   }
 }
-var db = null,
+global.db = null,
   dbDetails = new Object();
 
-var initDb = function (callback) {
+global.initDb = function (callback) {
   if (mongoURL == null) return;
 
   var mongodb = require('mongodb');
@@ -74,15 +73,16 @@ var initDb = function (callback) {
       callback(err);
       return;
     }
-
     db = conn;
     dbDetails.databaseName = db.databaseName;
+    console.log(db.databaseName);
     dbDetails.url = mongoURLLabel;
     dbDetails.type = 'MongoDB';
 
     console.log('Connected to MongoDB at: %s', mongoURL);
   });
-};app.use('/api', flipkart)
+};
+app.use('/api', flipkart)
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/home', express.static(__dirname + '/resources'));
 app.get('/', function (req, res) {
