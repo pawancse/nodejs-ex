@@ -138,10 +138,7 @@ function callFlipkartAPIAndGetProducts() {
                 return callNextURL(response.nextUrl);
             })
             .then(function () {
-                var input = {
-                    flipkart: product
-                }
-                resolve(input);
+                resolve(product);
             })
     })
 }
