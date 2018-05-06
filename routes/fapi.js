@@ -62,7 +62,6 @@ router.get('/Refreshflipkart', function (req, res, next) {
                     });
                     col.count(function (err, count) {
                         res.json({ itemAdded });
-                        
                         resolve(true);
                     });
                 } else {
