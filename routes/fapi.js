@@ -119,6 +119,7 @@ function getProducts(limit, priceOrder) {
                     products.push(obj);
                     obj = {};
                 }) 
+                console.log(products[0]);
                 resolve(products);
             });
         }
