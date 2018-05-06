@@ -108,6 +108,7 @@ function getProducts(limit, priceOrder) {
                     val.push(json[startLimit++]);
                 }
                 var obj = {};
+                console.log(val[0]);
                 val.forEach(function (items) {
                     obj.title = items.productBaseInfoV1.title;
                     obj.description = items.productBaseInfoV1.productDescription;
@@ -119,7 +120,6 @@ function getProducts(limit, priceOrder) {
                     products.push(obj);
                     obj = {};
                 }) 
-                console.log(products[0]);
                 resolve(products);
             });
         }
