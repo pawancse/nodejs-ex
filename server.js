@@ -75,7 +75,6 @@ global.initDb = function (callback) {
     }
     db = conn;
     dbDetails.databaseName = db.databaseName;
-    console.log(db.databaseName);
     dbDetails.url = mongoURLLabel;
     dbDetails.type = 'MongoDB';
 
