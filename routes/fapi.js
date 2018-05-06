@@ -47,6 +47,7 @@ router.get('/Refreshflipkart', function (req, res, next) {
                 if (!db) {
                     initDb(function (err) { console.log(err); });
                 }
+                console.log(db);
                 if (db) {
                     var col = db.collection('products');
                     // Create a document with request IP and current time of request
@@ -65,8 +66,7 @@ router.get('/Refreshflipkart', function (req, res, next) {
                         resolve(true);
                     });
                 } else {
-                    res.json({ value: 'not connected!!' });
-                    
+                    res.json({ value: 'not connected!!' });  
                     resolve(true);
                 }
             });
@@ -80,8 +80,9 @@ function getProducts(limit, priceOrder) {
         if (!db) {
             initDb(function (err) { console.log(err); });
         }
+        console.log(db);
         if (db) {
-            db.collection("products").find({}).toArray(function (err, json) {
+            db.collection('products').find({}).toArray(function (err, json) {
                 if (err) throw err;
                 var products = [];
                 var startLimit;
