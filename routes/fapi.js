@@ -51,7 +51,7 @@ router.get('/Refreshflipkart', function (req, res, next) {
                     var col = db.collection('products');
                     // Create a document with request IP and current time of request
                     var itemAdded = [];
-                    json.flipkart.forEach(function (item) {
+                    json.forEach(function (item) {
                         db.collection('products').findOne({ item }, function (err, result) {
                             if (err) {
                                 itemAdded.push(item);
